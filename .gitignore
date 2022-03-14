@@ -1,0 +1,28 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/ionic\ mobile\ app/mobile-d-app/node_modules
+/ionic\ mobile\ app/mobile-d-app/.pnp
+/ionic\ mobile\ app/mobile-d-app/.pnp.js
+
+# testing
+/ionic\ mobile\ app/mobile-d-app/coverage
+
+# production
+/ionic\ mobile\ app/mobile-d-app/build
+
+# misc
+/ionic\ mobile\ app/mobile-d-app/.DS_Store
+/ionic\ mobile\ app/mobile-d-app/.env.local
+/ionic\ mobile\ app/mobile-d-app/.env.development.local
+/ionic\ mobile\ app/mobile-d-app/.env.test.local
+/ionic\ mobile\ app/mobile-d-app/.env.production.local
+/ionic\ mobile\ app/mobile-d-app/.vscode
+/ionic\ mobile\ app/mobile-d-app/.idea
+
+/ionic\ mobile\ app/mobile-d-app/npm-debug.log*
+/ionic\ mobile\ app/mobile-d-app/yarn-debug.log*
+/ionic\ mobile\ app/mobile-d-app/yarn-error.log*
+
+# Optional eslint cache
+/ionic\ mobile\ app/mobile-d-app/.eslintcache
