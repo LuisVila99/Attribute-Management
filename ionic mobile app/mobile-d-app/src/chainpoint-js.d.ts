@@ -1,1 +1,1 @@
-declare module 'chainpoint-js';
+declare module 'chainpoint-js/dist/bundle.web';

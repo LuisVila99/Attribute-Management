@@ -2,21 +2,19 @@ import { IonButton, IonCard, IonContent, IonHeader, IonInput, IonItem, IonLabel,
 import { useCallback, useEffect, useState } from 'react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
-import sha256File from 'sha256-file';
-import chp from 'chainpoint-js';
-// import fs from 'browserify-fs';
+import sha256 from 'sha256';
+import chp from 'chainpoint-js/dist/bundle.web';
+
+
 
 const Home: React.FC = () => {
-  // const chp = require('chainpoint-js')
-  // const fs = require('fs');
   
   const [ID, setID] = useState<string>('')
   const [Attributes, setAttributes] = useState<string>('')
   const [Holder, setHolder] = useState<string>('')
   const [Verifier, setVerifier] = useState<string>('')
 
-  const CreateJsonFile = (ID: string, Attributes: string, Holder: string, Verifier: string) =>{
-    // var fs = require('browserify-fs');
+  const CreateJsonObject = (ID: string, Attributes: string, Holder: string, Verifier: string) =>{
     var empty: string[]
     empty = []
 
@@ -40,13 +38,13 @@ const Home: React.FC = () => {
 
     var json = JSON.stringify(obj);
     console.log(json)
-    // fs.writeFile('../../../../ex.json', json)
+    console.log(sha256(json))
+    return sha256(json)
   }
 
 
-  const SubmitToChainpoint = async () =>{
-    var path_to_json = 'C:\\Users\\Luís\\Desktop\\LP\\uni\\tese\\thesis\\thesis\\chainpoint\\example.json'
-    var hash = sha256File(path_to_json)
+  const SubmitToChainpoint = async (ID: string, Attributes: string, Holder: string, Verifier: string) =>{
+    var hash = CreateJsonObject(ID, Attributes, Holder, Verifier)
     var hashes = []
     hashes.push(hash)
     console.log('Hash of file: ' + hashes)
@@ -96,7 +94,7 @@ const Home: React.FC = () => {
             </IonItem>
           </IonList>
         </IonCard>
-        <IonButton onClick={() => SubmitToChainpoint()}>Submit</IonButton>
+        <IonButton onClick={() => SubmitToChainpoint(ID, Attributes, Holder, Verifier)}>Submit</IonButton>
       </IonContent>
     </IonPage>
   );
