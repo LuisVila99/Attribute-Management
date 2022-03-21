@@ -26,3 +26,18 @@
 
 # Optional eslint cache
 /ionic\ mobile\ app/mobile-d-app/.eslintcache
+
+/react\ mobile\ app/writeToBlockchain/node_modules/
+/react\ mobile\ app/writeToBlockchain/.expo/
+/react\ mobile\ app/writeToBlockchain/dist/
+/react\ mobile\ app/writeToBlockchain/npm-debug.*
+/react\ mobile\ app/writeToBlockchain/*.jks
+/react\ mobile\ app/writeToBlockchain/*.p8
+/react\ mobile\ app/writeToBlockchain/*.p12
+/react\ mobile\ app/writeToBlockchain/*.key
+/react\ mobile\ app/writeToBlockchain/*.mobileprovision
+/react\ mobile\ app/writeToBlockchain/*.orig.*
+/react\ mobile\ app/writeToBlockchain/web-build/
+
+# macOS
+/react\ mobile\ app/writeToBlockchain/.DS_Store

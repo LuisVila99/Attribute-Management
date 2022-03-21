@@ -1,0 +1,12 @@
+{
+    "id" : "1234567890",
+    "attributes" : [
+        "name",
+        "birthdate",
+        "email"
+    ],
+    "holder_pubkey" : "holder_pubkey",
+    "verifier_pubkey" : "verifier_pubkey",
+    "holder_signature" : "holder_signature",
+    "verifier_signature" : "verifier_signature"
+}
