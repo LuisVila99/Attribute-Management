@@ -4,13 +4,16 @@
 /ionic\ mobile\ app/mobile-d-app/node_modules
 /ionic\ mobile\ app/mobile-d-app/.pnp
 /ionic\ mobile\ app/mobile-d-app/.pnp.js
-
+# dependencies
+/ionic\ mobile\ app/mobile-d-app_holder/node_modules
+/ionic\ mobile\ app/mobile-d-app_holder/.pnp
+/ionic\ mobile\ app/mobile-d-app_holder/.pnp.js
 # testing
 /ionic\ mobile\ app/mobile-d-app/coverage
-
+/ionic\ mobile\ app/mobile-d-app_holder/coverage
 # production
 /ionic\ mobile\ app/mobile-d-app/build
-
+/ionic\ mobile\ app/mobile-d-app_holder/build
 # misc
 /ionic\ mobile\ app/mobile-d-app/.DS_Store
 /ionic\ mobile\ app/mobile-d-app/.env.local
@@ -19,13 +22,24 @@
 /ionic\ mobile\ app/mobile-d-app/.env.production.local
 /ionic\ mobile\ app/mobile-d-app/.vscode
 /ionic\ mobile\ app/mobile-d-app/.idea
+/ionic\ mobile\ app/mobile-d-app_holder/.DS_Store
+/ionic\ mobile\ app/mobile-d-app_holder/.env.local
+/ionic\ mobile\ app/mobile-d-app_holder/.env.development.local
+/ionic\ mobile\ app/mobile-d-app_holder/.env.test.local
+/ionic\ mobile\ app/mobile-d-app_holder/.env.production.local
+/ionic\ mobile\ app/mobile-d-app_holder/.vscode
+/ionic\ mobile\ app/mobile-d-app_holder/.idea
 
 /ionic\ mobile\ app/mobile-d-app/npm-debug.log*
 /ionic\ mobile\ app/mobile-d-app/yarn-debug.log*
 /ionic\ mobile\ app/mobile-d-app/yarn-error.log*
+/ionic\ mobile\ app/mobile-d-app_holder/npm-debug.log*
+/ionic\ mobile\ app/mobile-d-app_holder/yarn-debug.log*
+/ionic\ mobile\ app/mobile-d-app_holder/yarn-error.log*
 
 # Optional eslint cache
 /ionic\ mobile\ app/mobile-d-app/.eslintcache
+/ionic\ mobile\ app/mobile-d-app_holder/.eslintcache
 
 /react\ mobile\ app/writeToBlockchain/node_modules/
 /react\ mobile\ app/writeToBlockchain/.expo/
