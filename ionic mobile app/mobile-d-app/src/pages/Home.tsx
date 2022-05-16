@@ -16,14 +16,26 @@ const Home: React.FC = () => {
   const [Holder, setHolder] = useState<string>('')
   const [Verifier, setVerifier] = useState<string>('')
   const [Mode, setMode] = useState<string>('')
+  const [checked, setChecked] = useState(false);
 
-  const checkboxList = [
+  let checkboxList = [
     { val: 'Family Name', isChecked: false },
     { val: 'Given Name', isChecked: false },
     { val: 'Birth Date', isChecked: false },
     { val: 'Issue date', isChecked: false }
   ];
 
+  function Toggle(val_arg: string){
+    let len = checkboxList.length
+    let i = 0 
+    while( i < len ){
+      if(checkboxList[i].val == val_arg){
+        checkboxList[i].isChecked ? checkboxList[i].isChecked = false : checkboxList[i].isChecked = true
+      }
+      i += 1
+    }
+    console.log(checkboxList)
+  }
 
   const CreateJsonObject = async (ID: string, Attributes: string, Mode: string) =>{
     var empty: string[]
@@ -89,6 +101,38 @@ const Home: React.FC = () => {
     // // Wait 90 minutes for Bitcoin anchor proof, then run getProofs again
   } 
 
+  async function SubmitToBlockchain() {
+    let attributtes_string = ""
+    console.log(checkboxList)
+    checkboxList.map(({val, isChecked}) => 
+      {
+        console.log('here')
+        console.log(isChecked)
+        if(isChecked){
+          console.log('here2')
+          attributtes_string = attributtes_string + val + ';'
+        }
+      }
+    )
+    console.log("Attributes string: " + attributtes_string)
+    let hash = sha256(attributtes_string)
+    let hashes = []
+    hashes.push(hash)
+    console.log('Hash of attributes: ' + hashes)
+
+    let proofHandle = await chp.submitHashes(hashes)
+    console.log('Hash submitted: ' + proofHandle)
+
+    // Wait for Calendar proofs to be available
+    console.log('Sleeping 120 seconds (60 sec aggregation, 60 sec calendar) to wait for proofs to generate...')
+    await new Promise(resolve => setTimeout(resolve, 130000))
+
+    // Retrieve a Calendar proof for each hash that was submitted
+    let proofs = await chp.getProofs(proofHandle)
+    console.log('Proof Objects: Expand objects below to inspect.')
+    console.log(proofs)
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -119,11 +163,12 @@ const Home: React.FC = () => {
           {checkboxList.map(({ val, isChecked }, i) => (
             <IonItem key={i}>
               <IonLabel>{val}</IonLabel>
-              <IonCheckbox slot="end" value={val} checked={isChecked} />
+              <IonCheckbox slot="end" value={val} checked={isChecked} onIonChange={() => Toggle(val)}/>
             </IonItem>
           ))}
         </IonList>
         <IonButton onClick={() => WriteToFile()}>Request Attributes</IonButton>
+        <IonButton onClick={() => SubmitToBlockchain()}>Submit Toggled Attributes</IonButton>
       </IonContent>
     </IonPage>
   );
@@ -141,6 +186,4 @@ function arrayToString(message: string[]) {
 
 function WriteToFile() {
   let text = "something"
-  writeFileSync("C:\\Users\\luisp\\Desktop\\document.txt", text)
 }
-
