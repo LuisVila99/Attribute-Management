@@ -34,7 +34,6 @@ const Home: React.FC = () => {
       }
       i += 1
     }
-    console.log(checkboxList)
   }
 
   const CreateJsonObject = async (ID: string, Attributes: string, Mode: string) =>{
@@ -106,10 +105,8 @@ const Home: React.FC = () => {
     console.log(checkboxList)
     checkboxList.map(({val, isChecked}) => 
       {
-        console.log('here')
         console.log(isChecked)
         if(isChecked){
-          console.log('here2')
           attributtes_string = attributtes_string + val + ';'
         }
       }
@@ -128,6 +125,7 @@ const Home: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, 130000))
 
     // Retrieve a Calendar proof for each hash that was submitted
+    // TODO: Fix this part, is not working 
     let proofs = await chp.getProofs(proofHandle)
     console.log('Proof Objects: Expand objects below to inspect.')
     console.log(proofs)
