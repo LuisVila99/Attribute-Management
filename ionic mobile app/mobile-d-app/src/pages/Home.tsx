@@ -1,4 +1,4 @@
-import { IonButton, IonCard, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonCard, IonCheckbox, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useCallback, useEffect, useState } from 'react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
@@ -6,6 +6,7 @@ import sha256 from 'sha256';
 import chp from 'chainpoint-js/dist/bundle.web';
 // import NodeRSA from 'node-rsa';
 import forge from 'node-forge';
+import {writeFileSync} from 'fs';
 
 
 const Home: React.FC = () => {
@@ -16,27 +17,17 @@ const Home: React.FC = () => {
   const [Verifier, setVerifier] = useState<string>('')
   const [Mode, setMode] = useState<string>('')
 
+  const checkboxList = [
+    { val: 'Family Name', isChecked: false },
+    { val: 'Given Name', isChecked: false },
+    { val: 'Birth Date', isChecked: false },
+    { val: 'Issue date', isChecked: false }
+  ];
+
 
   const CreateJsonObject = async (ID: string, Attributes: string, Mode: string) =>{
     var empty: string[]
     empty = []
-
-    // let keys_holder = await window.crypto.subtle.generateKey(
-    //   {
-    //     name: "HMAC",
-    //     hash: {name: "SHA-512"}
-    //   },
-    //   true,
-    //   ["sign", "verify"]
-    // );
-    // let keys_verifier = await window.crypto.subtle.generateKey(
-    //   {
-    //     name: "HMAC",
-    //     hash: {name: "SHA-512"}
-    //   },
-    //   true,
-    //   ["sign", "verify"]
-    // );
 
     var rsa = forge.pki.rsa;
     let keys_holder = rsa.generateKeyPair({bits: 2048, e: 0x10001});
@@ -102,7 +93,7 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Write to Blockchain</IonTitle>
+          <IonTitle>Verifier</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -123,6 +114,16 @@ const Home: React.FC = () => {
           </IonList>
         </IonCard>
         <IonButton onClick={() => SubmitToChainpoint(ID, Attributes, Holder, Verifier, Mode)}>Submit</IonButton>
+
+        <IonList>
+          {checkboxList.map(({ val, isChecked }, i) => (
+            <IonItem key={i}>
+              <IonLabel>{val}</IonLabel>
+              <IonCheckbox slot="end" value={val} checked={isChecked} />
+            </IonItem>
+          ))}
+        </IonList>
+        <IonButton onClick={() => WriteToFile()}>Request Attributes</IonButton>
       </IonContent>
     </IonPage>
   );
@@ -137,3 +138,9 @@ function arrayToString(message: string[]) {
   }
   return m
 }
+
+function WriteToFile() {
+  let text = "something"
+  writeFileSync("C:\\Users\\luisp\\Desktop\\document.txt", text)
+}
+
