@@ -4,9 +4,7 @@ import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
 import sha256 from 'sha256';
 import chp from 'chainpoint-js/dist/bundle.web';
-// import NodeRSA from 'node-rsa';
 import forge from 'node-forge';
-import {writeFileSync} from 'fs';
 
 
 const Home: React.FC = () => {
@@ -36,17 +34,15 @@ const Home: React.FC = () => {
     }
   }
 
-  const CreateJsonObject = async (ID: string, Attributes: string, Mode: string) =>{
-    var empty: string[]
-    empty = []
 
+  const CreateJsonObject = async (atts: string[]) =>{
     var rsa = forge.pki.rsa;
     let keys_holder = rsa.generateKeyPair({bits: 2048, e: 0x10001});
     let keys_verifier = rsa.generateKeyPair({bits: 2048, e: 0x10001});    
     
     var obj = {
       id: '',
-      attributes: empty,
+      attributes: atts,
       holder_signature: '', //new ArrayBuffer(1024),
       verifier_signature: '', //new ArrayBuffer(1024),
       timestamp: Date.now(),
@@ -78,41 +74,42 @@ const Home: React.FC = () => {
 
 
   const SubmitToChainpoint = async (ID: string, Attributes: string, Holder: string, Verifier: string, Mode: string) =>{
-    var hash = CreateJsonObject(ID, Attributes, Mode)
-    // var hashes = []
-    // hashes.push(hash)
-    // console.log('Hash of file: ' + hashes)
+  //   var hash = CreateJsonObject(ID, Attributes, Mode)
+  //   var hashes = []
+  //   hashes.push(hash)
+  //   console.log('Hash of file: ' + hashes)
     
-    // let proofHandle = await chp.submitHashes(hashes)
-    // console.log('Hash submitted: ' + proofHandle)
+  //   let proofHandle = await chp.submitHashes(hashes)
+  //   console.log('Hash submitted: ' + proofHandle)
 
-    // console.log('Sleeping 120 seconds (60 sec aggregation, 60 sec calendar) to wait for proofs to generate...')
-    // await new Promise(resolve => setTimeout(resolve, 130000))
+  //   console.log('Sleeping 120 seconds (60 sec aggregation, 60 sec calendar) to wait for proofs to generate...')
+  //   await new Promise(resolve => setTimeout(resolve, 130000))
 
-    // let proofs = await chp.getProofs(proofHandle)
-    // console.log('Proof Objects: Expand objects below to inspect.')
-    // console.log(proofs)
+  //   let proofs = await chp.getProofs(proofHandle)
+  //   console.log('Proof Objects: Expand objects below to inspect.')
+  //   console.log(proofs)
 
-    // let verifiedProofs = await chp.verifyProofs(proofs)
-    // console.log('Verified Proof Objects: Expand objects below to inspect.')
-    // console.log(verifiedProofs)
+  //   let verifiedProofs = await chp.verifyProofs(proofs)
+  //   console.log('Verified Proof Objects: Expand objects below to inspect.')
+  //   console.log(verifiedProofs)
 
-    // // Wait 90 minutes for Bitcoin anchor proof, then run getProofs again
+  //   // // Wait 90 minutes for Bitcoin anchor proof, then run getProofs again
   } 
 
   async function SubmitToBlockchain() {
-    let attributtes_string = ""
+    var attributtes: string[]
+    attributtes = []
     console.log(checkboxList)
     checkboxList.map(({val, isChecked}) => 
       {
         console.log(isChecked)
         if(isChecked){
-          attributtes_string = attributtes_string + val + ';'
+          attributtes.push(val)
         }
       }
     )
-    console.log("Attributes string: " + attributtes_string)
-    let hash = sha256(attributtes_string)
+    console.log("Attributes array: " + attributtes)
+    let hash = await CreateJsonObject(attributtes)
     let hashes = []
     hashes.push(hash)
     console.log('Hash of attributes: ' + hashes)
@@ -121,14 +118,18 @@ const Home: React.FC = () => {
     console.log('Hash submitted: ' + proofHandle)
 
     // Wait for Calendar proofs to be available
-    console.log('Sleeping 120 seconds (60 sec aggregation, 60 sec calendar) to wait for proofs to generate...')
-    await new Promise(resolve => setTimeout(resolve, 130000))
+    console.log('Sleeping 12 sec to wait for proofs to generate...')
+    await new Promise(resolve => setTimeout(resolve, 12000))
 
     // Retrieve a Calendar proof for each hash that was submitted
     // TODO: Fix this part, is not working 
     let proofs = await chp.getProofs(proofHandle)
     console.log('Proof Objects: Expand objects below to inspect.')
     console.log(proofs)
+
+    let verifiedProofs = await chp.verifyProofs(proofs)
+    console.log('Verified Proof Objects: Expand objects below to inspect.')
+    console.log(verifiedProofs)
   }
 
   return (
