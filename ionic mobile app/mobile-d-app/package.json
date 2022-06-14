@@ -10,6 +10,8 @@
     "@capacitor/status-bar": "1.0.8",
     "@ionic/react": "^6.0.0",
     "@ionic/react-router": "^6.0.0",
+    "@juicemx/web3-eth-contract": "^3.3.0",
+    "@metamask/detect-provider": "^1.2.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
@@ -38,10 +40,13 @@
     "react-router-dom": "^5.2.0",
     "sha256": "^0.2.0",
     "sha256-file": "^1.0.0",
+    "stream": "^0.0.2",
+    "ts-stream": "^3.0.0",
     "typescript": "^4.1.3",
     "url": "^0.11.0",
     "util": "^0.12.4",
     "web-vitals": "^0.2.4",
+    "web3": "^1.7.3",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",
     "workbox-cacheable-response": "^5.1.4",
@@ -86,7 +91,7 @@
     "constants": "0.0.2",
     "crypto": "^1.0.1",
     "crypto-js": "^4.1.1",
-    "react-scripts": "5.0.0"
+    "react-scripts": "4.0.2"
   },
   "description": "An Ionic project",
   "browser": {

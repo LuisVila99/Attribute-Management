@@ -5,6 +5,7 @@ import './Home.css';
 import sha256 from 'sha256';
 import chp from 'chainpoint-js/dist/bundle.web';
 import forge from 'node-forge';
+import Blockchain from './Blockchain'
 
 
 const Home: React.FC = () => {
@@ -15,6 +16,7 @@ const Home: React.FC = () => {
   const [Verifier, setVerifier] = useState<string>('')
   const [Mode, setMode] = useState<string>('')
   const [checked, setChecked] = useState(false);
+ 
 
   let checkboxList = [
     { val: 'Family Name', isChecked: false },
@@ -166,8 +168,10 @@ const Home: React.FC = () => {
             </IonItem>
           ))}
         </IonList>
-        <IonButton onClick={() => WriteToFile()}>Request Attributes</IonButton>
-        <IonButton onClick={() => SubmitToBlockchain()}>Submit Toggled Attributes</IonButton>
+        {/* <IonButton onClick={() => WriteToFile()}>Request Attributes</IonButton>
+        <IonButton onClick={() => SubmitToBlockchain()}>Submit Toggled Attributes</IonButton> */}
+        <IonButton onClick={() => Blockchain.setAttributes()}>Submit Toggled Attributes</IonButton>
+        <IonButton onClick={() => Blockchain.getAttributes()}>See Attributes</IonButton>
       </IonContent>
     </IonPage>
   );
