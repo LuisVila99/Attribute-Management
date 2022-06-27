@@ -37,42 +37,42 @@ const Home: React.FC = () => {
   }
 
 
-  const CreateJsonObject = async (atts: string[]) =>{
-    var rsa = forge.pki.rsa;
-    let keys_holder = rsa.generateKeyPair({bits: 2048, e: 0x10001});
-    let keys_verifier = rsa.generateKeyPair({bits: 2048, e: 0x10001});    
+  // const CreateJsonObject = async (atts: string[]) =>{
+  //   var rsa = forge.pki.rsa;
+  //   let keys_holder = rsa.generateKeyPair({bits: 2048, e: 0x10001});
+  //   let keys_verifier = rsa.generateKeyPair({bits: 2048, e: 0x10001});    
     
-    var obj = {
-      id: '',
-      attributes: atts,
-      holder_signature: '', //new ArrayBuffer(1024),
-      verifier_signature: '', //new ArrayBuffer(1024),
-      timestamp: Date.now(),
-      mode: ''
-    }
+  //   var obj = {
+  //     id: '',
+  //     attributes: atts,
+  //     holder_signature: '', //new ArrayBuffer(1024),
+  //     verifier_signature: '', //new ArrayBuffer(1024),
+  //     timestamp: Date.now(),
+  //     mode: ''
+  //   }
 
-    obj.id = ID
-    for (var a of Attributes.split(",")){
-      obj.attributes.push(a)
-    }
-    var md1 = forge.md.sha1.create();
-    md1.update(arrayToString(obj.attributes), 'utf8');
-    obj.holder_signature = keys_holder.privateKey.sign(md1)
-    var md2 = forge.md.sha1.create();
-    md2.update(arrayToString(obj.attributes), 'utf8');
-    obj.verifier_signature = keys_verifier.privateKey.sign(md2)
-    obj.timestamp = Date.now()
-    obj.mode = Mode 
+  //   obj.id = ID
+  //   for (var a of Attributes.split(",")){
+  //     obj.attributes.push(a)
+  //   }
+  //   var md1 = forge.md.sha1.create();
+  //   md1.update(arrayToString(obj.attributes), 'utf8');
+  //   obj.holder_signature = keys_holder.privateKey.sign(md1)
+  //   var md2 = forge.md.sha1.create();
+  //   md2.update(arrayToString(obj.attributes), 'utf8');
+  //   obj.verifier_signature = keys_verifier.privateKey.sign(md2)
+  //   obj.timestamp = Date.now()
+  //   obj.mode = Mode 
 
-    var json = JSON.stringify(obj);
-    console.log(json)
+  //   var json = JSON.stringify(obj);
+  //   console.log(json)
 
-    console.log('signature verification: ', 
-                keys_holder.publicKey.verify(md1.digest().bytes(), obj.holder_signature),
-                keys_verifier.publicKey.verify(md2.digest().bytes(), obj.verifier_signature))
+  //   console.log('signature verification: ', 
+  //               keys_holder.publicKey.verify(md1.digest().bytes(), obj.holder_signature),
+  //               keys_verifier.publicKey.verify(md2.digest().bytes(), obj.verifier_signature))
 
-    return sha256(json)
-  }
+  //   return sha256(json)
+  // }
 
 
   const SubmitToChainpoint = async (ID: string, Attributes: string, Holder: string, Verifier: string, Mode: string) =>{
@@ -98,41 +98,41 @@ const Home: React.FC = () => {
   //   // // Wait 90 minutes for Bitcoin anchor proof, then run getProofs again
   } 
 
-  async function SubmitToBlockchain() {
-    var attributtes: string[]
-    attributtes = []
-    console.log(checkboxList)
-    checkboxList.map(({val, isChecked}) => 
-      {
-        console.log(isChecked)
-        if(isChecked){
-          attributtes.push(val)
-        }
-      }
-    )
-    console.log("Attributes array: " + attributtes)
-    let hash = await CreateJsonObject(attributtes)
-    let hashes = []
-    hashes.push(hash)
-    console.log('Hash of attributes: ' + hashes)
+  // async function SubmitToBlockchain() {
+  //   var attributtes: string[]
+  //   attributtes = []
+  //   console.log(checkboxList)
+  //   checkboxList.map(({val, isChecked}) => 
+  //     {
+  //       console.log(isChecked)
+  //       if(isChecked){
+  //         attributtes.push(val)
+  //       }
+  //     }
+  //   )
+  //   console.log("Attributes array: " + attributtes)
+  //   let hash = await CreateJsonObject(attributtes)
+  //   let hashes = []
+  //   hashes.push(hash)
+  //   console.log('Hash of attributes: ' + hashes)
 
-    let proofHandle = await chp.submitHashes(hashes)
-    console.log('Hash submitted: ' + proofHandle)
+  //   let proofHandle = await chp.submitHashes(hashes)
+  //   console.log('Hash submitted: ' + proofHandle)
 
-    // Wait for Calendar proofs to be available
-    console.log('Sleeping 12 sec to wait for proofs to generate...')
-    await new Promise(resolve => setTimeout(resolve, 12000))
+  //   // Wait for Calendar proofs to be available
+  //   console.log('Sleeping 12 sec to wait for proofs to generate...')
+  //   await new Promise(resolve => setTimeout(resolve, 12000))
 
-    // Retrieve a Calendar proof for each hash that was submitted
-    // TODO: Fix this part, is not working 
-    let proofs = await chp.getProofs(proofHandle)
-    console.log('Proof Objects: Expand objects below to inspect.')
-    console.log(proofs)
+  //   // Retrieve a Calendar proof for each hash that was submitted
+  //   // TODO: Fix this part, is not working 
+  //   let proofs = await chp.getProofs(proofHandle)
+  //   console.log('Proof Objects: Expand objects below to inspect.')
+  //   console.log(proofs)
 
-    let verifiedProofs = await chp.verifyProofs(proofs)
-    console.log('Verified Proof Objects: Expand objects below to inspect.')
-    console.log(verifiedProofs)
-  }
+  //   let verifiedProofs = await chp.verifyProofs(proofs)
+  //   console.log('Verified Proof Objects: Expand objects below to inspect.')
+  //   console.log(verifiedProofs)
+  // }
 
   return (
     <IonPage>
@@ -170,7 +170,7 @@ const Home: React.FC = () => {
         </IonList>
         {/* <IonButton onClick={() => WriteToFile()}>Request Attributes</IonButton>
         <IonButton onClick={() => SubmitToBlockchain()}>Submit Toggled Attributes</IonButton> */}
-        <IonButton onClick={() => Blockchain.setAttributes()}>Submit Toggled Attributes</IonButton>
+        <IonButton onClick={() => Blockchain.setAttributes(checkboxList)}>Submit Toggled Attributes</IonButton>
         <IonButton onClick={() => Blockchain.getAttributes()}>See Attributes</IonButton>
       </IonContent>
     </IonPage>
@@ -178,15 +178,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-function arrayToString(message: string[]) {
-  let m = ""
-  for (let mm of message){
-    m = m + mm
-  }
-  return m
-}
-
-function WriteToFile() {
-  let text = "something"
-}
