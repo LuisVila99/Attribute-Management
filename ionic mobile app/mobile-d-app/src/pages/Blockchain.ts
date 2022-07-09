@@ -4,6 +4,8 @@ import {Contract, EventData} from 'web3-eth-contract';
 import {AbiItem} from 'web3-utils';
 import ABI from '../services/abi.json';
 import CryptoJS from 'crypto-js';
+import Encryption from './Encryption';
+import crypto from 'crypto';
 
 const ALGORITHM = 'aes-256-cbc';
 const ENCODING = 'hex';
@@ -29,6 +31,18 @@ function arrayToString(message: any[]) {
   return m
 }
 
+let web3: Web3;
+let contract: Contract;
+web3 = new Web3(
+    'wss://rinkeby.infura.io/ws/v3/83995bca05dd4af692b750a63416f60d'
+);
+
+
+contract = new web3.eth.Contract(
+  ABI as AbiItem[],
+  '0x380FD1ADCa44dBd9FE25DFF2C19426e99E96696a'
+);
+
 export class Blockchain{
 
     constructor(){}
@@ -36,21 +50,23 @@ export class Blockchain{
     static async setAttributes(arr: any[]): Promise<string> {
         let string_atts = arrayToString(arr)
         console.log("ARR: ", string_atts)
-        let cypher = encrypt(string_atts)
-        console.log("Cypher: ", cypher.toString())
-        let decypher = decrypt(cypher.toString())
-        console.log("Decypher: ", decypher.toString(CryptoJS.enc.Utf8))
-        let web3: Web3;
-        let contract: Contract;
-        web3 = new Web3(
-            'wss://rinkeby.infura.io/ws/v3/83995bca05dd4af692b750a63416f60d'
-        );
+        const {publicKey, privateKey } = await Encryption.GetKeys();
+        console.log(publicKey, privateKey)
+        let cypher = await Encryption.Encrypt(string_atts, publicKey)
+        console.log("Cypher: ", cypher)
+        let decypher = await Encryption.Decrypt(cypher, privateKey)
+        console.log("Decypher: ", decypher)
+        // let web3: Web3;
+        // let contract: Contract;
+        // web3 = new Web3(
+        //     'wss://rinkeby.infura.io/ws/v3/83995bca05dd4af692b750a63416f60d'
+        // );
     
 
-        contract = new web3.eth.Contract(
-         ABI as AbiItem[],
-         '0xCa820598345A94a0F2F4307c2f53d92D1a3144A1'
-        );
+        // contract = new web3.eth.Contract(
+        //  ABI as AbiItem[],
+        //  '0x380FD1ADCa44dBd9FE25DFF2C19426e99E96696a'
+        // );
 
         const provider: any = await detectEthereumProvider();
     
@@ -69,32 +85,25 @@ export class Blockchain{
             from: provider.selectedAddress, // must match user's active address.
             //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
             // Optional, but used for defining smart contract creation and interaction.
-            data: contract.methods.SetAttributes(arr[0]?.isChecked, 
-                                                arr[1]?.isChecked,
-                                                arr[2]?.isChecked, 
-                                                arr[3]?.isChecked).encodeABI(),
+            data: contract.methods.SetAttributes(cypher).encodeABI(),
             //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
           };
         }      
     
-        return provider.request({
+        provider.request({
           method: 'eth_sendTransaction',
           params: [transactionParameters],
+        }).then(() =>{
+          let st = contract.methods.GetAttributes().call().then(console.log);
+          console.log("st: ", st)
         });
+
+        
+        return "ai ai"
     }
 
     static async getAttributes() {
-        let web3: Web3;
-        let contract: Contract;
-        web3 = new Web3(
-            'wss://rinkeby.infura.io/ws/v3/83995bca05dd4af692b750a63416f60d'
-        );
-    
-
-        contract = new web3.eth.Contract(
-         ABI as AbiItem[],
-         '0xCa820598345A94a0F2F4307c2f53d92D1a3144A1'
-        );
+        
 
         const provider: any = await detectEthereumProvider();
     
@@ -104,20 +113,28 @@ export class Blockchain{
     
         await provider.request({ method: 'eth_requestAccounts' });
     
-        // const transactionParameters = {
-        //   // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
-        //   // gas: '0x2710', // customizable by user during MetaMask confirmation.
+        // let transactionParameters = {
+        // //   // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+        // //   // gas: '0x2710', // customizable by user during MetaMask confirmation.
+        // //   to: contract.options.address, // Required except during contract publications.
+        // //   from: provider.selectedAddress, // must match user's active address.
+        // //   //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
+        // //   // Optional, but used for defining smart contract creation and interaction.
         //   to: contract.options.address, // Required except during contract publications.
         //   from: provider.selectedAddress, // must match user's active address.
-        //   //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
-        //   // Optional, but used for defining smart contract creation and interaction.
-        console.log(contract.methods.GetAttributes().call())
-        //   //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+        //   data: contract.methods.GetAttributes().call()
+        // //   //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
         // };
+        console.log("here")
+        let st = contract.methods.GetAttributes().call({from: '0xa2Ae4f54e7CaC3CE0f8a607cbae85f978e7Fe2bc'}).then(console.log);
+        console.log("st: ", st)
     
         // return provider.request({
-        //   method: 'eth_sendTransaction',
-        //   params: [transactionParameters],
+        //    method: 'eth_sendTransaction',
+        //    params: [transactionParameters],
+        // })
+        // .then((result: string) => {
+        //   console.log("Result: ", result)
         // });
     }
 }

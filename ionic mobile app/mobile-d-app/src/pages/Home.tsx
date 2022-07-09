@@ -138,11 +138,11 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Verifier</IonTitle>
+          <IonTitle>Holder</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonCard>
+        {/* <IonCard>
           <IonList>
             <IonItem>
               <IonLabel>ID</IonLabel>
@@ -158,8 +158,7 @@ const Home: React.FC = () => {
             </IonItem>
           </IonList>
         </IonCard>
-        <IonButton onClick={() => SubmitToChainpoint(ID, Attributes, Holder, Verifier, Mode)}>Submit</IonButton>
-
+        <IonButton onClick={() => SubmitToChainpoint(ID, Attributes, Holder, Verifier, Mode)}>Submit</IonButton> */}
         <IonList>
           {checkboxList.map(({ val, isChecked }, i) => (
             <IonItem key={i}>
