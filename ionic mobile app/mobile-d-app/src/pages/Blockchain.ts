@@ -6,21 +6,12 @@ import ABI from '../services/abi.json';
 import CryptoJS from 'crypto-js';
 import Encryption from './Encryption';
 import crypto from 'crypto';
+import InputDataDecoder from 'ethereum-input-data-decoder';
 
 const ALGORITHM = 'aes-256-cbc';
 const ENCODING = 'hex';
 const IV_LENGTH = 16;
 const KEY = process.env.ENCRYPTION_KEY!;
-
-function encrypt(data: string) {
-  var encrypted = CryptoJS.AES.encrypt(data, "Secret Passphrase");
-  return encrypted
-}
-
-function decrypt (data: string){
-  var decrypted = CryptoJS.AES.decrypt(data, "Secret Passphrase");
-  return decrypted
-}
 
 
 function arrayToString(message: any[]) {
@@ -42,6 +33,9 @@ contract = new web3.eth.Contract(
   ABI as AbiItem[],
   '0x380FD1ADCa44dBd9FE25DFF2C19426e99E96696a'
 );
+
+
+let decoder = new InputDataDecoder(ABI);
 
 export class Blockchain{
 
@@ -85,26 +79,20 @@ export class Blockchain{
             from: provider.selectedAddress, // must match user's active address.
             //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
             // Optional, but used for defining smart contract creation and interaction.
-            data: contract.methods.SetAttributes(cypher).encodeABI(),
+            data: contract.methods.SetAttributes(decypher).encodeABI(),
             //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
           };
         }      
     
-        provider.request({
+        console.log(await provider.request({
           method: 'eth_sendTransaction',
           params: [transactionParameters],
-        }).then(() =>{
-          let st = contract.methods.GetAttributes().call().then(console.log);
-          console.log("st: ", st)
-        });
+        }))
 
-        
-        return "ai ai"
+        return "fin"
     }
 
     static async getAttributes() {
-        
-
         const provider: any = await detectEthereumProvider();
     
         if (!provider) {
@@ -125,10 +113,18 @@ export class Blockchain{
         //   data: contract.methods.GetAttributes().call()
         // //   //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
         // };
-        console.log("here")
-        let st = contract.methods.GetAttributes().call({from: '0xa2Ae4f54e7CaC3CE0f8a607cbae85f978e7Fe2bc'}).then(console.log);
-        console.log("st: ", st)
-    
+
+        //console.log("here")
+        //let st = contract.methods.GetAttributes().call({from: '0xa2Ae4f54e7CaC3CE0f8a607cbae85f978e7Fe2bc'}).then(console.log);
+        //console.log("st: ", st)
+
+        // console.log(await web3.eth.getTransaction())
+        let txHash = "0xcdb1ff653d8a760743714ca0ccab90d87d44e9e5e851abe92ce51e2db5f5c3f0"
+        web3.eth.getTransaction(txHash, (error, txResult) => {
+          const result = decoder.decodeData(txResult.input);
+          console.log(result);
+        });
+        
         // return provider.request({
         //    method: 'eth_sendTransaction',
         //    params: [transactionParameters],
