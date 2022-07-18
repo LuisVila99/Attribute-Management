@@ -88,6 +88,23 @@ export class Blockchain{
           console.log(result);
         });
     }
+
+    static async getAttributesPerTransaction(transaction: string) {
+      const provider: any = await detectEthereumProvider();
+  
+      if (!provider) {
+        throw new Error('Please install MetaMask');
+      }
+  
+      await provider.request({ method: 'eth_requestAccounts' });
+  
+
+      let txHash = transaction
+      web3.eth.getTransaction(txHash, (error, txResult) => {
+        const result = decoder.decodeData(txResult.input);
+        console.log(result);
+      });
+  }
 }
 
 export default Blockchain;
