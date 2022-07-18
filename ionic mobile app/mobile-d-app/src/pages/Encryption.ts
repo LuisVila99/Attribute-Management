@@ -1,5 +1,3 @@
-import rsa from 'js-crypto-rsa';
-
 export class Encryption{
 
     constructor(){} 
@@ -19,7 +17,6 @@ export class Encryption{
 
     static async Encrypt(msg: string, pub: any){
         var enc = new TextEncoder();
-        // var [pub, priv] = await this.GetKeys();
         return window.crypto.subtle.encrypt(
             {
               name: "RSA-OAEP"
