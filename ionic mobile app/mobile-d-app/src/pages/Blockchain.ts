@@ -38,9 +38,9 @@ export class Blockchain{
         let string_atts = arrayToString(arr)
         console.log("ARR: ", string_atts)
         const {publicKey, privateKey } = await Encryption.GetKeys();
-        console.log(publicKey, privateKey)
+        console.log("KEYS: ", publicKey, privateKey)
         let cypher = await Encryption.Encrypt(string_atts, publicKey)
-        console.log("Cypher: ", cypher)
+        // console.log("Cypher: ", cypher)
         let decypher = await Encryption.Decrypt(cypher, privateKey)
         console.log("Decypher: ", decypher)
 
@@ -104,7 +104,7 @@ export class Blockchain{
         const result = decoder.decodeData(txResult.input);
         console.log(result);
       });
-  }
+    }
 }
 
 export default Blockchain;
