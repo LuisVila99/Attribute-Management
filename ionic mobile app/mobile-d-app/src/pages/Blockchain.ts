@@ -4,6 +4,7 @@ import {Contract, EventData} from 'web3-eth-contract';
 import {AbiItem} from 'web3-utils';
 import ABI from '../services/abi.json';
 import Encryption from './Encryption';
+import SymmetricEncryption from './SymmetricEncryption';
 import InputDataDecoder from 'ethereum-input-data-decoder';
 
 let web3: Web3;
@@ -34,44 +35,104 @@ export class Blockchain{
 
     constructor(){}
 
-    static async setAttributes(arr: any[]): Promise<string> {
-        let string_atts = arrayToString(arr)
-        console.log("ARR: ", string_atts)
-        const {publicKey, privateKey } = await Encryption.GetKeys();
-        console.log("KEYS: ", publicKey, privateKey)
-        let cypher = await Encryption.Encrypt(string_atts, publicKey)
-        // console.log("Cypher: ", cypher)
-        let decypher = await Encryption.Decrypt(cypher, privateKey)
-        console.log("Decypher: ", decypher)
+    // static async setAttributes(arr: any[]): Promise<string> {
+    //     let string_atts = arrayToString(arr)
+    //     console.log("ARR: ", string_atts)
+    //     const {publicKey, privateKey } = await Encryption.GetKeys();
+    //     console.log("KEYS: ", publicKey, privateKey)
+    //     let cypher = await Encryption.Encrypt(string_atts, publicKey)
+    //     // console.log("Cypher: ", cypher)
+    //     let decypher = await Encryption.Decrypt(cypher, privateKey)
+    //     console.log("Decypher: ", decypher)
 
-        const provider: any = await detectEthereumProvider();
+    //     const provider: any = await detectEthereumProvider();
     
-        if (!provider) {
-          throw new Error('Please install MetaMask');
-        }
+    //     if (!provider) {
+    //       throw new Error('Please install MetaMask');
+    //     }
     
-        await provider.request({ method: 'eth_requestAccounts' });
+    //     await provider.request({ method: 'eth_requestAccounts' });
         
-        let transactionParameters = undefined
-        if(arr != undefined && arr.length == 4){
-          transactionParameters = {
-            // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
-            // gas: '0x2710', // customizable by user during MetaMask confirmation.
-            to: contract.options.address, // Required except during contract publications.
-            from: provider.selectedAddress, // must match user's active address.
-            //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
-            // Optional, but used for defining smart contract creation and interaction.
-            data: contract.methods.SetAttributes(string_atts).encodeABI(),
-            //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
-          };
-        }      
-        console.log("Parameters: ", transactionParameters)
-        return await provider.request({
-          method: 'eth_sendTransaction',
-          params: [transactionParameters],
-        })
-    }
+    //     let transactionParameters = undefined
+    //     if(arr != undefined && arr.length == 4){
+    //       transactionParameters = {
+    //         // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+    //         // gas: '0x2710', // customizable by user during MetaMask confirmation.
+    //         to: contract.options.address, // Required except during contract publications.
+    //         from: provider.selectedAddress, // must match user's active address.
+    //         //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
+    //         // Optional, but used for defining smart contract creation and interaction.
+    //         data: contract.methods.SetAttributes(string_atts).encodeABI(),
+    //         //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+    //       };
+    //     }      
+    //     console.log("Parameters: ", transactionParameters)
+    //     return await provider.request({
+    //       method: 'eth_sendTransaction',
+    //       params: [transactionParameters],
+    //     })
+    // }
 
+
+    static async setAttributes(arr: any[]): Promise<string> {
+      let string_atts = arrayToString(arr)
+      console.log("ARR: ", string_atts)
+      let cypher = await SymmetricEncryption.encrypt(string_atts, "password")
+      console.log("Cypher: ", cypher)
+      const provider: any = await detectEthereumProvider();
+  
+      if (!provider) {
+        throw new Error('Please install MetaMask');
+      }
+  
+      await provider.request({ method: 'eth_requestAccounts' });
+      
+      let transactionParameters = undefined
+      if(arr != undefined && arr.length == 4){
+        transactionParameters = {
+          // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+          // gas: '0x2710', // customizable by user during MetaMask confirmation.
+          to: contract.options.address, // Required except during contract publications.
+          from: provider.selectedAddress, // must match user's active address.
+          //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
+          // Optional, but used for defining smart contract creation and interaction.
+          data: contract.methods.SetAttributes(cypher).encodeABI(),
+          //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+        };
+      }      
+      console.log("Parameters: ", transactionParameters)
+      return await provider.request({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters],
+      })
+  }
+
+  //   static async getAttributes() {
+  //     const provider: any = await detectEthereumProvider();
+    
+  //     if (!provider) {
+  //       throw new Error('Please install MetaMask');
+  //     }
+    
+  //     await provider.request({ method: 'eth_requestAccounts' });
+        
+  //     let transactionParameters = undefined
+  //     transactionParameters = {
+  //       // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+  //       // gas: '0x2710', // customizable by user during MetaMask confirmation.
+  //       to: contract.options.address, // Required except during contract publications.
+  //       from: provider.selectedAddress, // must match user's active address.
+  //       //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
+  //       // Optional, but used for defining smart contract creation and interaction.
+  //       data: contract.methods.GetAttributes().encodeABI(),
+  //       //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+  //     };    
+
+  //     console.log("Parameters: ", transactionParameters)
+  //     console.log(await contract.methods.GetAttributes().call({to:contract.options.address,from:provider.selectedAddress}))
+
+  //     return "finito"
+  // }
 
     static async getAttributes() {
       const provider: any = await detectEthereumProvider();
@@ -95,10 +156,12 @@ export class Blockchain{
       };    
 
       console.log("Parameters: ", transactionParameters)
-      console.log(await contract.methods.GetAttributes().call({to:contract.options.address,from:provider.selectedAddress}))
-
-      return "finito"
-  }
+      let cypher = await contract.methods.GetAttributes().call({to:contract.options.address,from:provider.selectedAddress})
+      console.log("Cypher from get: ", cypher)
+      let decypher = SymmetricEncryption.decrypt(cypher, "password")
+      console.log("Decypher: ", decypher)
+      return decypher
+    }
 
     // Not really working \\
     static async getTransactionsOfAccount() {
@@ -118,7 +181,6 @@ export class Blockchain{
         }).catch(err => console.log("getPastLogs failed", err));
         console.log("ending")
     }
-
 
 
 
