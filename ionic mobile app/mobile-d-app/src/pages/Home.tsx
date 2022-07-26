@@ -75,6 +75,8 @@ const Home: React.FC = () => {
         </IonList>
         <IonButton onClick={() => Blockchain.setAttributes(checkboxList)}>Submit Toggled Attributes</IonButton>
         <IonButton onClick={() => Blockchain.getAttributes()}>See Attributes</IonButton>
+        <IonButton onClick={() => Blockchain.getTransactionsOfAccount()}>Past Transactions</IonButton>
+        <IonButton onClick={() => Blockchain.getAttributesPerTransaction("0xf849394648ae5fbdbecbb72e150995c07f4fdb783f78c527f98faece62a6fa08")}>See Transaction</IonButton>
       </IonContent>
     </IonPage>
   );

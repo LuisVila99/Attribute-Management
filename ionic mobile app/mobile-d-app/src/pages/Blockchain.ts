@@ -17,7 +17,7 @@ web3 = new Web3(
 
 contract = new web3.eth.Contract(
   ABI as AbiItem[],
-  '0x380FD1ADCa44dBd9FE25DFF2C19426e99E96696a'
+  '0x92939837c37cd92d4f52e805584b3168a278211f'
 );
 
 
@@ -61,33 +61,66 @@ export class Blockchain{
             from: provider.selectedAddress, // must match user's active address.
             //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
             // Optional, but used for defining smart contract creation and interaction.
-            data: contract.methods.SetAttributes(cypher).encodeABI(),
+            data: contract.methods.SetAttributes(string_atts).encodeABI(),
             //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
           };
         }      
-    
+        console.log("Parameters: ", transactionParameters)
         return await provider.request({
           method: 'eth_sendTransaction',
           params: [transactionParameters],
         })
     }
 
+
     static async getAttributes() {
-        const provider: any = await detectEthereumProvider();
+      const provider: any = await detectEthereumProvider();
     
+      if (!provider) {
+        throw new Error('Please install MetaMask');
+      }
+    
+      await provider.request({ method: 'eth_requestAccounts' });
+        
+      let transactionParameters = undefined
+      transactionParameters = {
+        // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+        // gas: '0x2710', // customizable by user during MetaMask confirmation.
+        to: contract.options.address, // Required except during contract publications.
+        from: provider.selectedAddress, // must match user's active address.
+        //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
+        // Optional, but used for defining smart contract creation and interaction.
+        data: contract.methods.GetAttributes().encodeABI(),
+        //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+      };    
+
+      console.log("Parameters: ", transactionParameters)
+      console.log(await contract.methods.GetAttributes().call({to:contract.options.address,from:provider.selectedAddress}))
+
+      return "finito"
+  }
+
+    // Not really working \\
+    static async getTransactionsOfAccount() {
+        const provider: any = await detectEthereumProvider();
         if (!provider) {
           throw new Error('Please install MetaMask');
         }
-    
         await provider.request({ method: 'eth_requestAccounts' });
-    
-
-        let txHash = "0xcdb1ff653d8a760743714ca0ccab90d87d44e9e5e851abe92ce51e2db5f5c3f0"
-        web3.eth.getTransaction(txHash, (error, txResult) => {
-          const result = decoder.decodeData(txResult.input);
-          console.log(result);
-        });
+        let account = "0xa2Ae4f54e7CaC3CE0f8a607cbae85f978e7Fe2bc"
+        console.log("starting")
+        web3.eth.getPastLogs({address:account})
+        .then(res => {
+          console.log("res: ", res)
+          res.forEach(rec => {
+            console.log(rec.blockNumber, rec.transactionHash, rec.topics);
+          });
+        }).catch(err => console.log("getPastLogs failed", err));
+        console.log("ending")
     }
+
+
+
 
     static async getAttributesPerTransaction(transaction: string) {
       const provider: any = await detectEthereumProvider();
