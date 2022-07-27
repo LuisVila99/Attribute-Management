@@ -6,6 +6,7 @@ import ABI from '../services/abi.json';
 import Encryption from './Encryption';
 import SymmetricEncryption from './SymmetricEncryption';
 import InputDataDecoder from 'ethereum-input-data-decoder';
+import { time } from 'console';
 
 let web3: Web3;
 let contract: Contract;
@@ -170,21 +171,20 @@ export class Blockchain{
           throw new Error('Please install MetaMask');
         }
         await provider.request({ method: 'eth_requestAccounts' });
-        let account = "0xa2Ae4f54e7CaC3CE0f8a607cbae85f978e7Fe2bc"
+        let contract = "0x92939837c37cd92d4f52e805584b3168a278211f"
         console.log("starting")
-        web3.eth.getPastLogs({address:account})
-        .then(res => {
-          console.log("res: ", res)
-          res.forEach(rec => {
-            console.log(rec.blockNumber, rec.transactionHash, rec.topics);
-          });
-        }).catch(err => console.log("getPastLogs failed", err));
+        // web3.eth.getPastLogs({address:contract})
+        // .then(res => {
+        //   console.log("res: ", res)
+        //   res.forEach(rec => {
+        //     console.log(rec.blockNumber, rec.transactionHash, rec.topics);
+        //   });
+        // }).catch(err => console.log("getPastLogs failed", err));
         console.log("ending")
     }
 
 
-
-    static async getAttributesPerTransaction(transaction: string) {
+    static async getAttributesPerTransaction(transaction: string, password: string) {
       const provider: any = await detectEthereumProvider();
   
       if (!provider) {
@@ -195,10 +195,37 @@ export class Blockchain{
   
 
       let txHash = transaction
-      web3.eth.getTransaction(txHash, (error, txResult) => {
-        const result = decoder.decodeData(txResult.input);
-        console.log(result);
+      let tx = await web3.eth.getTransaction(txHash, (error, txResult) => {
+        const input = decoder.decodeData(txResult.input);
+        console.log("Input: ", input);
+        let decypher = SymmetricEncryption.decrypt(input.inputs[0], password) 
+        console.log("Attributes consented in transaction: ", decypher)
       });
+      let block = tx.blockNumber
+      if(block){
+        web3.eth.getBlock(block, (error, timestamp) => {
+          console.log("Timestamp: ", timestamp.timestamp)
+        })
+      }
+      else{
+        console.log("No block number found")
+      }
+    }
+
+    static async eventsListener(){
+      contract.events.UpdateConsentments()
+      .on('data', (event: any) => {
+          console.log(event);
+      })
+      .on('error', console.error);
+    }
+
+    static async getPastEvents(){
+      console.log(await contract.getPastEvents("UpdateConsentments", {fromBlock: 0}));
+    }
+
+    static async getPastEventsPerAddress(address: string){
+      console.log(await web3.eth.getPastLogs({fromBlock: 1, address: address}));
     }
 }
 

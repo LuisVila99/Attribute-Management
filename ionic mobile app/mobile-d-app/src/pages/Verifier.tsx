@@ -7,6 +7,7 @@ import Blockchain from './Blockchain'
 const Home: React.FC = () => {
   
   const [TransactionHash, setTransactionHash] = useState<string>('')
+  const [Password, setPassword] = useState<string>('')
  
 
   return (
@@ -23,7 +24,14 @@ const Home: React.FC = () => {
                       placeholder="Transaction Hash"
                       onIonChange={(e:any) => setTransactionHash(e.target.value)}></IonInput>
         </IonItem>
-        <IonButton onClick={() => Blockchain.getAttributesPerTransaction(TransactionHash)}>See Transaction</IonButton>
+        <IonItem>
+            <IonLabel>Password</IonLabel>
+            <IonInput value={Password} 
+                      placeholder="Password"
+                      onIonChange={(e:any) => setPassword(e.target.value)}></IonInput>
+        </IonItem>
+        <IonButton onClick={() => Blockchain.getAttributesPerTransaction(TransactionHash, Password)}>See Transaction</IonButton>
+        <IonButton onClick={() => Blockchain.getPastEvents()}>See Updates</IonButton>
       </IonContent>
     </IonPage>
   );

@@ -1,4 +1,4 @@
-import { IonButton, IonCheckbox, IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonCheckbox, IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar, IonInput} from '@ionic/react';
 import { useState } from 'react';
 import './Home.css';
 import Blockchain from './Blockchain'
@@ -6,12 +6,9 @@ import Blockchain from './Blockchain'
 
 const Home: React.FC = () => {
   
-  const [ID, setID] = useState<string>('')
-  const [Attributes, setAttributes] = useState<string>('')
-  const [Holder, setHolder] = useState<string>('')
-  const [Verifier, setVerifier] = useState<string>('')
-  const [Mode, setMode] = useState<string>('')
-  const [checked, setChecked] = useState(false);
+  const [TransactionHash, setTransactionHash] = useState<string>('')
+  const [Address, setAddress] = useState<string>('')
+  const [Password, setPassword] = useState<string>('')
  
 
   let checkboxList = [
@@ -76,7 +73,26 @@ const Home: React.FC = () => {
         <IonButton onClick={() => Blockchain.setAttributes(checkboxList)}>Submit Toggled Attributes</IonButton>
         <IonButton onClick={() => Blockchain.getAttributes()}>See Attributes</IonButton>
         <IonButton onClick={() => Blockchain.getTransactionsOfAccount()}>Past Transactions</IonButton>
-        <IonButton onClick={() => Blockchain.getAttributesPerTransaction("0xf849394648ae5fbdbecbb72e150995c07f4fdb783f78c527f98faece62a6fa08")}>See Transaction</IonButton>
+        <IonItem>
+            <IonLabel>Transaction Hash</IonLabel>
+            <IonInput value={TransactionHash} 
+                      placeholder="Transaction Hash"
+                      onIonChange={(e:any) => setTransactionHash(e.target.value)}></IonInput>
+        </IonItem>
+        <IonItem>
+            <IonLabel>Password</IonLabel>
+            <IonInput value={Password} 
+                      placeholder="Password"
+                      onIonChange={(e:any) => setPassword(e.target.value)}></IonInput>
+        </IonItem>
+        <IonButton onClick={() => Blockchain.getAttributesPerTransaction(TransactionHash, Password)}>See Transaction</IonButton>
+        <IonItem>
+            <IonLabel>Address</IonLabel>
+            <IonInput value={Address} 
+                      placeholder="Address"
+                      onIonChange={(e:any) => setAddress(e.target.value)}></IonInput>
+        </IonItem>
+        <IonButton onClick={() => Blockchain.getPastEventsPerAddress(Address)}>Past Events</IonButton>
       </IonContent>
     </IonPage>
   );
