@@ -108,32 +108,6 @@ export class Blockchain{
       })
   }
 
-  //   static async getAttributes() {
-  //     const provider: any = await detectEthereumProvider();
-    
-  //     if (!provider) {
-  //       throw new Error('Please install MetaMask');
-  //     }
-    
-  //     await provider.request({ method: 'eth_requestAccounts' });
-        
-  //     let transactionParameters = undefined
-  //     transactionParameters = {
-  //       // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
-  //       // gas: '0x2710', // customizable by user during MetaMask confirmation.
-  //       to: contract.options.address, // Required except during contract publications.
-  //       from: provider.selectedAddress, // must match user's active address.
-  //       //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
-  //       // Optional, but used for defining smart contract creation and interaction.
-  //       data: contract.methods.GetAttributes().encodeABI(),
-  //       //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
-  //     };    
-
-  //     console.log("Parameters: ", transactionParameters)
-  //     console.log(await contract.methods.GetAttributes().call({to:contract.options.address,from:provider.selectedAddress}))
-
-  //     return "finito"
-  // }
 
     static async getAttributes() {
       const provider: any = await detectEthereumProvider();
@@ -149,7 +123,7 @@ export class Blockchain{
         // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
         // gas: '0x2710', // customizable by user during MetaMask confirmation.
         to: contract.options.address, // Required except during contract publications.
-        from: provider.selectedAddress, // must match user's active address.
+        from: provider.selectedAddress.address, // must match user's active address.
         //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
         // Optional, but used for defining smart contract creation and interaction.
         data: contract.methods.GetAttributes().encodeABI(),
@@ -159,7 +133,7 @@ export class Blockchain{
       console.log("Parameters: ", transactionParameters)
       let cypher = await contract.methods.GetAttributes().call({to:contract.options.address,from:provider.selectedAddress})
       console.log("Cypher from get: ", cypher)
-      let decypher = SymmetricEncryption.decrypt(cypher, "password")
+      let decypher = await SymmetricEncryption.decrypt(cypher, "password")
       console.log("Decypher: ", decypher)
       return decypher
     }
