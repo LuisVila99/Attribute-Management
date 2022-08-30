@@ -5,14 +5,20 @@ export class SymmetricEncryption{
     constructor(){}
 
     static async encrypt(data: string, KEY: string) {
+        // TODO: check if ignore does not introduce errors
+        // @ts-ignore
         var signed = CryptoJS.HmacSHA256(data, KEY)
         data = data + "signature:" + signed.toString() + "|"
         console.log("data: ", data)
+        // TODO: check if ignore does not introduce errors
+        // @ts-ignore
         var encrypted = CryptoJS.AES.encrypt(data, KEY)
         return encrypted.toString()
     }
 
     static async decrypt(data: string, KEY: string) {
+        // TODO: check if ignore does not introduce errors
+        // @ts-ignore
         var decrypted = CryptoJS.AES.decrypt(data, KEY);
         let dec_str = decrypted.toString(CryptoJS.enc.Utf8)
         var rx = /(.*)signature:(.*)\|/g
@@ -21,6 +27,8 @@ export class SymmetricEncryption{
         let dec_data = arr![1]
         let signature = arr![2]
         console.log("Signature: ", signature)
+        // TODO: check if ignore does not introduce errors
+        // @ts-ignore
         if (signature == CryptoJS.HmacSHA256(dec_data, KEY).toString()){
             console.log("Valid signature!")
             return decrypted.toString(CryptoJS.enc.Utf8)
