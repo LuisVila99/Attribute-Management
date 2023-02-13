@@ -93,6 +93,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "3.4.3",
+    "@ionic/app-scripts": "^3.2.4",
     "@types/node": "^12.20.55",
     "@types/sha256-file": "^1.0.1",
     "constants": "0.0.2",

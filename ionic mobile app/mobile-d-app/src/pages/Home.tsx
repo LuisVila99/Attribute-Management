@@ -13,9 +13,38 @@ const Home: React.FC = () => {
 
   let checkboxList = [
     { val: 'Family Name', isChecked: false },
-    { val: 'Given Name', isChecked: false },
-    { val: 'Birth Date', isChecked: false },
-    { val: 'Issue date', isChecked: false }
+    { val: 'Given Names', isChecked: false },
+    { val: 'Date of birth', isChecked: false },
+    { val: 'Date of issue', isChecked: false },
+    { val: 'Date of expiry', isChecked: false },
+    { val: 'Issuing country', isChecked: false },
+    { val: 'Issuing authority', isChecked: false },
+    { val: 'Licence number', isChecked: false },
+    { val: 'Portrait of mDL holder', isChecked: false },
+    { val: 'Categories of vehicles/restrictions/conditions', isChecked: false },
+    { val: 'UN distinguishing sign', isChecked: false },
+    { val: 'Administrative number', isChecked: false },
+    { val: 'Sex', isChecked: false },
+    { val: 'Height (cm) a', isChecked: false },
+    { val: 'Weight (kg) a', isChecked: false },
+    { val: 'Eye colour', isChecked: false },
+    { val: 'Hair colour', isChecked: false },
+    { val: 'Place of birth', isChecked: false },
+    { val: 'Permanent place of residence', isChecked: false },
+    { val: 'Portrait image timestamp', isChecked: false },
+    { val: 'Age attestation: How old are you (in years)?', isChecked: false },
+    { val: 'Age attestation: In what year were you born?', isChecked: false },
+    { val: 'Age attestation: Nearest “true” attestation above request', isChecked: false },
+    { val: 'Issuing jurisdiction', isChecked: false },
+    { val: 'Nationality', isChecked: false },
+    { val: 'Resident city', isChecked: false },
+    { val: 'Resident state/province/district', isChecked: false },
+    { val: 'Resident postal code', isChecked: false },
+    { val: 'Resident country', isChecked: false },
+    { val: 'Biometric template XX', isChecked: false },
+    { val: 'Family name in national characters', isChecked: false },
+    { val: 'Given name in national characters', isChecked: false },
+    { val: 'Signature / usual mark', isChecked: false }  
   ];
 
   function Toggle(val_arg: string){
