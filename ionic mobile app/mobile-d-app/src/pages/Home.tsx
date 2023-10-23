@@ -99,7 +99,13 @@ const Home: React.FC = () => {
             </IonItem>
           ))}
         </IonList>
-        <IonButton onClick={() => Blockchain.setAttributes(checkboxList)}>Submit Toggled Attributes</IonButton>
+        <IonItem>
+            <IonLabel>Password</IonLabel>
+            <IonInput value={Password} 
+                      placeholder="Password"
+                      onIonChange={(e:any) => setPassword(e.target.value)}></IonInput>
+        </IonItem>
+        <IonButton onClick={() => Blockchain.setAttributes(checkboxList, Password)}>Submit Toggled Attributes</IonButton>
         <IonButton onClick={() => Blockchain.getAttributes()}>See Attributes</IonButton>
         <IonButton onClick={() => Blockchain.getTransactionsOfAccount()}>Past Transactions</IonButton>
         <IonItem>

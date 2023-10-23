@@ -14,20 +14,21 @@ let decoder = new InputDataDecoder(ABI);
 
 
 web3 = new Web3(
-    'wss://rinkeby.infura.io/ws/v3/83995bca05dd4af692b750a63416f60d'
+    'https://goerli.infura.io/v3/e2256592c3cf4126a5dc339cd4964355'
 );
 
 contract = new web3.eth.Contract(
   ABI as AbiItem[],
-  '0x92939837c37cd92d4f52e805584b3168a278211f'
+  '0xcd3F090E82aE84e3F46e253cF0877aD4c2c5222B'
 );
 
 
-function arrayToString(message: any[]) {
+function arrayToString(message: any[], entity: string) {
   let m = "|"
   for (let mm of message){
     m = m + mm.val + ':' + mm.isChecked + '|'
   }
+  m = m + 'Entity:' + entity + '|';
   return m
 }
 
@@ -36,49 +37,11 @@ export class Blockchain{
 
     constructor(){}
 
-    // static async setAttributes(arr: any[]): Promise<string> {
-    //     let string_atts = arrayToString(arr)
-    //     console.log("ARR: ", string_atts)
-    //     const {publicKey, privateKey } = await Encryption.GetKeys();
-    //     console.log("KEYS: ", publicKey, privateKey)
-    //     let cypher = await Encryption.Encrypt(string_atts, publicKey)
-    //     // console.log("Cypher: ", cypher)
-    //     let decypher = await Encryption.Decrypt(cypher, privateKey)
-    //     console.log("Decypher: ", decypher)
 
-    //     const provider: any = await detectEthereumProvider();
-    
-    //     if (!provider) {
-    //       throw new Error('Please install MetaMask');
-    //     }
-    
-    //     await provider.request({ method: 'eth_requestAccounts' });
-        
-    //     let transactionParameters = undefined
-    //     if(arr != undefined && arr.length == 4){
-    //       transactionParameters = {
-    //         // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
-    //         // gas: '0x2710', // customizable by user during MetaMask confirmation.
-    //         to: contract.options.address, // Required except during contract publications.
-    //         from: provider.selectedAddress, // must match user's active address.
-    //         //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
-    //         // Optional, but used for defining smart contract creation and interaction.
-    //         data: contract.methods.SetAttributes(string_atts).encodeABI(),
-    //         //chainId: '0x3', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
-    //       };
-    //     }      
-    //     console.log("Parameters: ", transactionParameters)
-    //     return await provider.request({
-    //       method: 'eth_sendTransaction',
-    //       params: [transactionParameters],
-    //     })
-    // }
-
-
-    static async setAttributes(arr: any[]): Promise<string> {
-      let string_atts = arrayToString(arr)
+    static async setAttributes(arr: any[], password="", entity="<PSP_ID>"): Promise<string> {
+      let string_atts = arrayToString(arr, entity)
       console.log("ARR: ", string_atts)
-      let cypher = await SymmetricEncryption.encrypt(string_atts, "password")
+      let cypher = await SymmetricEncryption.encrypt(string_atts, password)
       console.log("Cypher: ", cypher)
       const provider: any = await detectEthereumProvider();
   
@@ -89,10 +52,9 @@ export class Blockchain{
       await provider.request({ method: 'eth_requestAccounts' });
       
       let transactionParameters = undefined
-      if(arr != undefined && arr.length == 4){
+      if(arr != undefined){
         transactionParameters = {
           // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
-          // gas: '0x2710', // customizable by user during MetaMask confirmation.
           to: contract.options.address, // Required except during contract publications.
           from: provider.selectedAddress, // must match user's active address.
           //value: '0x00', // Only required to send ether to the recipient from the initiating external account.
@@ -138,7 +100,6 @@ export class Blockchain{
       return decypher
     }
 
-    // Not really working \\
     static async getTransactionsOfAccount() {
         const provider: any = await detectEthereumProvider();
         if (!provider) {
