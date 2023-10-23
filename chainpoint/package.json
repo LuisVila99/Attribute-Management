@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "chainpoint-js": "^1.4.2",
+    "sha256-file": "^1.0.0"
+  }
+}
