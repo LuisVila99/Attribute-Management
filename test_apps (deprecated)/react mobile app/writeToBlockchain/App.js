@@ -33,7 +33,7 @@ const sendData = async () =>{
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Click the button to submit a hash to the blockchain (hopefully : D)</Text>
+      <Text>Click the button to submit a hash to the blockchain</Text>
       <Button onClick={sendData}>
         Submit
       </Button>

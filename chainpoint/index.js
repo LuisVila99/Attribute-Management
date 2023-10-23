@@ -15,7 +15,7 @@ async function run(path_to_json){
 
     let proofs = await chp.getProofs(proofHandle)
     console.log('Proof Objects: Expand objects below to inspect.')
-    console.log(proofs)
+    console.log(JSON.stringify(proofs, undefined, 2))
 
     let verifiedProofs = await chp.verifyProofs(proofs)
     console.log('Verified Proof Objects: Expand objects below to inspect.')

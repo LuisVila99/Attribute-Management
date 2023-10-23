@@ -1,5 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+node_modules
 # dependencies
 /ionic\ mobile\ app/mobile-d-app/node_modules
 /ionic\ mobile\ app/mobile-d-app/.pnp
@@ -55,3 +56,4 @@
 
 # macOS
 /react\ mobile\ app/writeToBlockchain/.DS_Store
+.DS_Store
